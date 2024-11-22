@@ -13,5 +13,7 @@ struct step
 
 void step_new(struct step *step, const char *name, const char *cmd);
 void step_print(struct step *step);
+void step_set_name(struct step *step, const char *fmt, ...);
+void step_set_cmd(struct step *step, const char *fmt, ...);
 
 #endif
