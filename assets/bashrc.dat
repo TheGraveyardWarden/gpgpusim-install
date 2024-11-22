@@ -1,0 +1,6 @@
+alias ls='ls --color=auto'
+
+PS1='[\[\033[38;2;255;255;255m\]\u\[\033[38;2;0;255;0m\]@wheezy:\w\[\033[00m\]] '
+
+export PATH=/bin:/sbin:/usr/sbin:$PATH
+export TERM=xterm

@@ -5,16 +5,35 @@
 #include <errno.h>
 #include <string.h>
 
+void stepmgr_new(struct stepmgr *stepmgr, size_t stepsz)
+{
+	stepmgr->steps = malloc(stepsz * sizeof(struct step));
+	if (!stepmgr->steps)
+	{
+		perror("malloc()");
+		exit(1);
+	}
+
+	stepmgr->stepsz = stepsz;
+	stepmgr->nr_steps = 0;
+}
+
+void stepmgr_add_step(struct stepmgr *stepmgr, struct step *step)
+{
+	if (stepmgr->nr_steps == stepmgr->stepsz)
+	{
+		printf("no more room\n");
+		exit(1);
+	}
+
+	step_new(&stepmgr->steps[stepmgr->nr_steps++], step->name, step->cmd);
+}
+
 void
 stepmgr_init(struct stepmgr *stepmgr,
-						 struct step *steps,
-						 size_t stepsz,
 						 const char *filepath,
 						 char reset)
 {
-	stepmgr->steps = steps;
-	stepmgr->stepsz = stepsz;
-
 	int fd;
 	if ((fd = open(filepath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR)) < 0)
 	{
@@ -31,6 +50,7 @@ stepmgr_init(struct stepmgr *stepmgr,
 	if (reset)
 	{
 		exec("/bin/echo > %s", filepath);
+		exec("/bin/rm /tmp/gpgpusim_rbind 2>/dev/null");
 		return;
 	}
 
@@ -41,7 +61,7 @@ stepmgr_init(struct stepmgr *stepmgr,
 	{
 		line[nread - 1] = 0;
 
-		for (int i = 0; i < stepmgr->stepsz; i++)
+		for (int i = 0; i < stepmgr->nr_steps; i++)
 			if (!strncmp(stepmgr->steps[i].name, line, strlen(stepmgr->steps[i].name)))
 			{
 				stepmgr->steps[i].finished = 1;
@@ -56,7 +76,7 @@ void stepmgr_print(struct stepmgr *stepmgr)
 {
 	printf("Total number of steps: %d\n", stepmgr->stepsz);
 
-	for (int i = 0; i < stepmgr->stepsz; i++)
+	for (int i = 0; i < stepmgr->nr_steps; i++)
 		step_print(&stepmgr->steps[i]);
 }
 
@@ -64,7 +84,7 @@ void stepmgr_run(struct stepmgr *stepmgr, const char *logfile)
 {
 	int ret;
 
-	for (int i = 0; i < stepmgr->stepsz; i++)
+	for (int i = 0; i < stepmgr->nr_steps; i++)
 	{
 		struct step *this = &stepmgr->steps[i];
 		if (this->finished)

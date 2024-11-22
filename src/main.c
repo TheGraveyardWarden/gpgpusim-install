@@ -4,6 +4,9 @@
 #include <string.h>
 #include "stepmgr.h"
 #include "rand_str.h"
+#include "exec.h"
+
+#define STEPMGR_STEP_SZ 0x10
 
 enum command {
 	COMMAND_NONE = 0,
@@ -23,12 +26,6 @@ static void usage(const char *prog)
 	printf("\t -d: path to install debian (if not present /opt/wheezy)\n");
 	exit(1);
 }
-
-static struct step steps[] = {
-	{ .name = "Installing Debian 7 in /opt/wheezy", .cmd = "/bin/debootstrap wheezy /opt/wheezy http://archive.debian.org/debian" },
-	{ .name = "Setup fresh installed debian's environment", .cmd = "./scripts/setup_env.sh" },
-	{ .name = "Installing gcc 5", .cmd = "./scripts/install-gcc-5.sh" },
-};
 
 int main(int argc, char *argv[])
 {
@@ -68,15 +65,56 @@ int main(int argc, char *argv[])
 	if (command == COMMAND_NONE)
 		usage(argv[0]);
 
+	if (!debpath)
+		debpath = "/opt/wheezy";
+
+	if (!cudapath)
+	{
+		if (exec("./scripts/download 'https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run' ./assets/cuda_9.run") != 0)
+		{
+			printf("download failed\nrun the program again to continue downlaod.\n");
+			exit(1);
+		}
+		cudapath = "./assets/cuda_9.run";
+	}
+
+	if (!gccpath)
+	{
+		if (exec("./scripts/download 'http://icanhazip.com' ./assets/gcc-5.debs.tar") != 0)
+		{
+			printf("download failed\nrun the program again to continue downlaod.\n");
+			exit(1);
+		}
+		gccpath = "./assets/gcc-5.debs.tar";
+	}
+
 	if (geteuid() != 0)
 	{
 		printf("must be root\n");
 		exit(1);
 	}
 
+	stepmgr_new(&stepmgr, STEPMGR_STEP_SZ);
+
+	struct step step;
+	step.finished = 0;
+	step_set_name(&step, "Installing Debian 7 in %s", debpath);
+	step_set_cmd(&step, "/bin/debootstrap wheezy %s http://archive.debian.org/debian", debpath);
+	stepmgr_add_step(&stepmgr, &step);
+
+	step_set_name(&step, "Setup fresh installed debian's environment");
+	step_set_cmd(&step, "./scripts/setup_env.sh %s", debpath);
+	stepmgr_add_step(&stepmgr, &step);
+
+	step_set_name(&step, "Installing gcc 5");
+	step_set_cmd(&step, "./scripts/install-gcc-5.sh %s %s", debpath, gccpath);
+	stepmgr_add_step(&stepmgr, &step);
+
+	step_set_name(&step, "Installing cuda 9");
+	step_set_cmd(&step, "./scripts/install-cuda-9.sh %s %s", debpath, cudapath);
+	stepmgr_add_step(&stepmgr, &step);
+
 	stepmgr_init(&stepmgr,
-							 steps,
-							 sizeof(steps) / sizeof(struct step),
 							 "/etc/gpgpusim_checkpoint",
 							 command == COMMAND_REINSTALL);
 
@@ -85,4 +123,6 @@ int main(int argc, char *argv[])
 	printf("Installing gpgpusim\nyou can use 'tail -f %s' to see what's happening\n", logfile);
 
 	stepmgr_run(&stepmgr, logfile);
+
+	return 0;
 }
