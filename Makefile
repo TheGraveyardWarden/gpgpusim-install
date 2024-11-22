@@ -3,7 +3,7 @@ SRC_DIR=./src
 BIN_DIR=./bin
 OBJ_DIR=./obj
 INCLUDE_DIRS=-I$(SRC_DIR)
-BIN=gpgpusim_install
+BIN=$(BIN_DIR)/gpgpusim_install
 SRCS=$(wildcard $(SRC_DIR)/*.c)
 OBJS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
