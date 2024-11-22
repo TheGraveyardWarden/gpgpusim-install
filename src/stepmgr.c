@@ -79,7 +79,7 @@ void stepmgr_run(struct stepmgr *stepmgr, const char *logfile)
 		printf("%s...", this->name);
 		fflush(stdout);
 
-		snprintf(cmd, 512, "/bin/echo %s >> %s ; %s >> %s 2>> %s",
+		snprintf(cmd, 512, "/bin/echo \"%s\" >> %s ; %s >> %s 2>> %s",
 						 this->name, logfile, this->cmd, logfile, logfile);
 		ret = exec(cmd);
 		
