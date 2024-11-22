@@ -30,9 +30,7 @@ stepmgr_init(struct stepmgr *stepmgr,
 
 	if (reset)
 	{
-		char cmd[128];
-		snprintf(cmd, 128, "/bin/echo > %s", filepath);
-		exec(cmd);
+		exec("/bin/echo > %s", filepath);
 		return;
 	}
 
@@ -64,7 +62,6 @@ void stepmgr_print(struct stepmgr *stepmgr)
 
 void stepmgr_run(struct stepmgr *stepmgr, const char *logfile)
 {
-	char cmd[512];
 	int ret;
 
 	for (int i = 0; i < stepmgr->stepsz; i++)
@@ -79,12 +76,10 @@ void stepmgr_run(struct stepmgr *stepmgr, const char *logfile)
 		printf("%s...", this->name);
 		fflush(stdout);
 
-		snprintf(cmd, 512, "/bin/echo \"%s\" >> %s ; %s >> %s 2>> %s",
-						 this->name, logfile, this->cmd, logfile, logfile);
-		ret = exec(cmd);
+		ret = exec("/bin/echo \"%s\" >> %s ; %s >> %s 2>> %s",
+							 this->name, logfile, this->cmd, logfile, logfile);
 		
-		snprintf(cmd, 512, "/bin/echo '-----------------------------' >> %s", logfile);
-		exec(cmd);
+		exec("/bin/echo '-----------------------------' >> %s", logfile);
 
 		if (!ret)
 		{

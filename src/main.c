@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	if (!install && !reset)
+	if ((!install && !reset) || (install && reset))
 		usage(argv[0]);
 
 	if (geteuid() != 0)
