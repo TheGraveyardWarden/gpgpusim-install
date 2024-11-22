@@ -7,6 +7,6 @@
  *		< 0 child was terminated by a signal. return value is signal number * -1
  *		> 0 return value is cmd exit status
  */
-int exec(const char *cmd);
+int exec(const char *cmd, ...);
 
 #endif
