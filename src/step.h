@@ -1,9 +1,13 @@
 #ifndef _STEP_H_
 #define _STEP_H_
 
+#define STEP_NAME_SZ 128
+#define STEP_CMD_SZ  128
+
 struct step
 {
-	char *name, *cmd;
+	char name[STEP_NAME_SZ];
+	char cmd[STEP_CMD_SZ];
 	char finished;
 };
 

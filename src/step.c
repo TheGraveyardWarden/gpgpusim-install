@@ -4,8 +4,8 @@
 
 void step_new(struct step *step, const char *name, const char *cmd)
 {
-	step->name = (char*)name;
-	step->cmd = (char*)cmd;
+	strncpy(step->name, name, STEP_NAME_SZ);
+	strncpy(step->cmd, cmd, STEP_CMD_SZ);
 	step->finished = 0;
 }
 

@@ -6,18 +6,17 @@
 
 static void usage(const char *prog)
 {
-	printf("usage: %s [OPTIONS]\n", prog);
-	printf("\nOPTIONS:\n");
+	printf("usage: %s [COMMANDS]\n", prog);
+	printf("\nCOMMANDS:\n");
 	printf("\t -r: restart the operation and ignore checkpoints\n");
+	printf("\t -i: start installtion\n");
 	exit(1);
 }
 
 static struct step steps[] = {
-	{ .name = "step 1", .cmd = "cat /etc/passwd" },
-	{ .name = "step 2", .cmd = "cat /home/t5/Docs/gpgpusim-install/Makefile" },
-	{ .name = "step 3", .cmd = "cat /etc/shadow" },
-	{ .name = "step 4", .cmd = "ls /home/t5" },
-	{ .name = "step 5", .cmd = "ls /opt" },
+	{ .name = "Installing Debian 7 in /opt/wheezy", .cmd = "/bin/debootstrap wheezy /opt/wheezy http://archive.debian.org/debian" },
+	{ .name = "Setup fresh installed debian's environment", .cmd = "./scripts/setup_env.sh" },
+	{ .name = "Installing gcc 5", .cmd = "./scripts/install-gcc-5.sh" },
 };
 
 int main(int argc, char *argv[])
@@ -26,19 +25,26 @@ int main(int argc, char *argv[])
 	char logfile[64];
 	char token[10];
 	char reset = 0;
+	char install = 0;
 	int opt;
 
-	while ((opt = getopt(argc, argv, "r")) != -1)
+	while ((opt = getopt(argc, argv, "ri")) != -1)
 	{
 		switch(opt)
 		{
 			case 'r':
 				reset = 1;
 				break;
+			case 'i':
+				install = 1;
+				break;
 			default:
 				usage(argv[0]);
 		}
 	}
+
+	if (!install && !reset)
+		usage(argv[0]);
 
 	if (geteuid() != 0)
 	{
@@ -53,6 +59,7 @@ int main(int argc, char *argv[])
 
 	rand_str(token, 10);
 	snprintf(logfile, 64, "/tmp/gpgpusim_install_%s.log", token);
+	printf("Installing gpgpusim\nyou can use 'tail -f %s' to see what's happening\n", logfile);
 
 	stepmgr_run(&stepmgr, logfile);
 }
