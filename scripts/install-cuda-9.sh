@@ -13,3 +13,4 @@ run_wheezy "cpanm Tie::File"
 run_wheezy "/bin/chmod +x $WD/cuda.run"
 run_wheezy "$WD/cuda.run"
 /bin/cat ./assets/cuda_9_bashrc.dat >> $DEBPATH/root/.bashrc
+run_wheezy "/bin/rm $WD -rfv"
