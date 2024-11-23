@@ -3,6 +3,7 @@
 DEBPATH=$1
 
 echo "\
+#!/bin/bash \
 if [ -f /tmp/gpgpusim_rbind ]; then \
 	echo "already rbind!"; \
 else \

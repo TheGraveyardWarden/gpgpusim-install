@@ -122,6 +122,10 @@ int main(int argc, char *argv[])
 	step_set_cmd(&step, "./scripts/install-gpgpusim.sh %s", debpath);
 	stepmgr_add_step(&stepmgr, &step);
 
+	step_set_name(&step, "Generating gpgpusim-use command");
+	step_set_cmd(&step, "./scripts/gen-gpgpusim-use.sh %s", debpath);
+	stepmgr_add_step(&stepmgr, &step);
+
 	stepmgr_init(&stepmgr,
 							 "/etc/gpgpusim_checkpoint",
 							 command == COMMAND_REINSTALL);
