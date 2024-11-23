@@ -5,13 +5,13 @@ DEBPATH=$1
 echo "\
 #!/bin/bash \
 if [ -f /tmp/gpgpusim_rbind ]; then \
-	echo "already rbind!"; \
+	echo 'already rbind!'; \
 else \
 	/bin/mount --rbind /sys $DEBPATH/sys; \
 	/bin/mount --rbind /proc $DEBPATH/proc; \
 	/bin/mount --rbind /dev $DEBPATH/dev; \
 	/bin/mount --rbind /run $DEBPATH/run; \
-	/bin/echo "do not rm me" > /tmp/gpgpusim_rbind; \
+	/bin/echo 'do not rm me' > /tmp/gpgpusim_rbind; \
 fi" > ./bin/gpgpusim-rbind
 
 /bin/chmod +x ./bin/gpgpusim-rbind
