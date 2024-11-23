@@ -14,7 +14,6 @@ else \
 fi" > ./bin/gpgpusim-rbind
 
 /bin/chmod +x ./bin/gpgpusim-rbind
-./bin/gpgpusim-rbind
 
 /bin/ln -s $DEBPATH/bin/bash $DEBPATH/usr/bin/bash
 /bin/cat ./assets/bashrc.dat >> $DEBPATH/root/.bashrc
