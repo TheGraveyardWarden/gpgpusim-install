@@ -7,12 +7,18 @@ BIN=$(BIN_DIR)/gpgpusim_install
 SRCS=$(wildcard $(SRC_DIR)/*.c)
 OBJS=$(patsubst $(SRC_DIR)/%.c,$(OBJ_DIR)/%.o,$(SRCS))
 
-all: $(OBJS)
-	$(CC) $(INCLUDE_DIRS) $^ -o $(BIN)
+.PHONY: mkdir all
+
+all: mkdir $(OBJS)
+	$(CC) $(INCLUDE_DIRS) $(OBJS) -o $(BIN)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(INCLUDE_DIRS) -c $^ -o $@
 
+mkdir:
+	@if [ ! -d bin ]; then mkdir bin; fi
+	@if [ ! -d obj ]; then mkdir obj; fi
+
 clean:
-	@rm bin/*
-	@rm obj/*
+	@rm bin -r
+	@rm obj -r
