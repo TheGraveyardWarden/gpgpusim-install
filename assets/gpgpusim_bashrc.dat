@@ -1,0 +1,1 @@
+cd /root/gpgpusim; . ./setup_environment; cd $OLDPWD
