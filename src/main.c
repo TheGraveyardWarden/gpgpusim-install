@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
 	if (!cudapath)
 	{
-		if (exec("./scripts/download 'https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run' ./assets/cuda_9.run") != 0)
+		if (exec("./scripts/download.sh 'https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run' ./assets/cuda_9.run") != 0)
 		{
 			printf("download failed\nrun the program again to continue download.\n");
 			exit(1);
@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
 	if (!gccpath)
 	{
-		if (exec("./scripts/download 'https://s32.picofile.com/d/8480766934/15eaf298-3d2d-4036-9d89-e7a3d950c8df/gcc_5_debs.tar' ./assets/gcc-5.debs.tar") != 0)
+		if (exec("./scripts/download.sh 'https://s32.picofile.com/d/8480766934/15eaf298-3d2d-4036-9d89-e7a3d950c8df/gcc_5_debs.tar' ./assets/gcc-5.debs.tar") != 0)
 		{
 			printf("download failed\nrun the program again to continue download.\n");
 			exit(1);
