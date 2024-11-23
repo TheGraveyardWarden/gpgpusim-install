@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
 	if (!gccpath)
 	{
-		if (exec("./scripts/download.sh 'https://s32.picofile.com/d/8480766934/15eaf298-3d2d-4036-9d89-e7a3d950c8df/gcc_5_debs.tar' ./assets/gcc-5.debs.tar") != 0)
+		if (exec("./scripts/download.sh 'https://github.com/TheGraveyardWarden/gpgpusim-install/releases/download/asset/gcc-5.debs.tar' ./assets/gcc-5.debs.tar") != 0)
 		{
 			printf("download failed\nrun the program again to continue download.\n");
 			exit(1);
