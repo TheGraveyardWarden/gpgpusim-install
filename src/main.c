@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	{
 		if (exec("./scripts/download 'https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run' ./assets/cuda_9.run") != 0)
 		{
-			printf("download failed\nrun the program again to continue downlaod.\n");
+			printf("download failed\nrun the program again to continue download.\n");
 			exit(1);
 		}
 		cudapath = "./assets/cuda_9.run";
@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
 
 	if (!gccpath)
 	{
-		if (exec("./scripts/download 'http://icanhazip.com' ./assets/gcc-5.debs.tar") != 0)
+		if (exec("./scripts/download 'https://s32.picofile.com/d/8480766934/15eaf298-3d2d-4036-9d89-e7a3d950c8df/gcc_5_debs.tar' ./assets/gcc-5.debs.tar") != 0)
 		{
-			printf("download failed\nrun the program again to continue downlaod.\n");
+			printf("download failed\nrun the program again to continue download.\n");
 			exit(1);
 		}
 		gccpath = "./assets/gcc-5.debs.tar";
@@ -112,6 +112,14 @@ int main(int argc, char *argv[])
 
 	step_set_name(&step, "Installing cuda 9");
 	step_set_cmd(&step, "./scripts/install-cuda-9.sh %s %s", debpath, cudapath);
+	stepmgr_add_step(&stepmgr, &step);
+
+	step_set_name(&step, "Cloning gpgpusim");
+	step_set_cmd(&step, "/bin/git clone https://github.com/thegraveyardwarden/gpgpusim.git");
+	stepmgr_add_step(&stepmgr, &step);
+
+	step_set_name(&step, "Installing gpgpusim in %s", debpath);
+	step_set_cmd(&step, "./scripts/install-gpgpusim.sh %s", debpath);
 	stepmgr_add_step(&stepmgr, &step);
 
 	stepmgr_init(&stepmgr,
