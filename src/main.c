@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	struct step step;
 	step.finished = 0;
 	step_set_name(&step, "Installing Debian 7 in %s", debpath);
-	step_set_cmd(&step, "/bin/debootstrap wheezy %s http://archive.debian.org/debian", debpath);
+	step_set_cmd(&step, "debootstrap wheezy %s http://archive.debian.org/debian", debpath);
 	stepmgr_add_step(&stepmgr, &step);
 
 	step_set_name(&step, "Setup fresh installed debian's environment");
