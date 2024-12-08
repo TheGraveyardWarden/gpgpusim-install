@@ -65,3 +65,4 @@ Now you can run this command when you want to chroot to debian and use gpgpusim:
 gpgpusim-use
 ```
 Ctrl+D pops you out into your own os.</br>
+gpgpusim files are under root directory.</br>
