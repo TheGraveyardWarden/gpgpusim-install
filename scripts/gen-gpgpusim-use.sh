@@ -11,12 +11,12 @@ else \
 	/bin/mount --rbind /dev $DEBPATH/dev; \
 	/bin/mount --rbind /run $DEBPATH/run; \
 	/bin/echo 'do not rm me' > /tmp/gpgpusim_rbind; \
-fi" > ./bin/gpgpusim-rbind
+fi" > /bin/gpgpusim-rbind
 
 echo "\
 gpgpusim-rbind; \
 chroot $DEBPATH; \
-" > ./bin/gpgpusim-use
+" > /bin/gpgpusim-use
 
-/bin/chmod +x ./bin/gpgpusim-use
-/bin/chmod +x ./bin/gpgpusim-rbind
+/bin/chmod +x /bin/gpgpusim-use
+/bin/chmod +x /bin/gpgpusim-rbind
