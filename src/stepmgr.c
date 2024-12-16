@@ -51,6 +51,7 @@ stepmgr_init(struct stepmgr *stepmgr,
 	{
 		exec("/bin/echo > %s", filepath);
 		exec("/bin/rm /tmp/gpgpusim_rbind 2>/dev/null");
+		// remove gpgpusim-use as well
 		return;
 	}
 
