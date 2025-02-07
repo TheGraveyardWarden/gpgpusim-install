@@ -2,6 +2,12 @@
 
 DEBPATH=$1
 
+if [ `/usr/bin/whoami` != "root" ]
+then
+	echo "Must be root"
+	exit 1
+fi
+
 echo "\
 if [ -f /tmp/gpgpusim_rbind ]; then \
 	echo 'already rbind!'; \
